@@ -1,0 +1,8 @@
+{
+    "hostname":"localhost",
+    "port":"8080",
+    "http":"http",
+    "realm":"TestRealm",
+    "client_id":"account",
+    "client_secret":"uQx0y8a4ro4earfbKKrDppNIbjL6HpJw"
+}
