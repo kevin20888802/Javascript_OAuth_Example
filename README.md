@@ -1,5 +1,7 @@
 # Javascript_OAuth_Example
 
+[中文](https://github.com/kevin20888802/Javascript_OAuth_Example/blob/main/README.md) | [English](https://github.com/kevin20888802/Javascript_OAuth_Example/blob/main/README_ENG.md)
+
 ## 簡介
 
 Javascript_OAuth_Example 是一個使用 JavaScript 主要撰寫的示例程式，主要用於實現 OAuth 驗證機制中的取得 token 的部分。程式分為兩個部分：瀏覽器端的 JavaScript 程式和 Node.js 伺服器版本。
