@@ -8,7 +8,7 @@ const tokenEndpoint = '';
 
 module.exports = async function(req, res, next) {
   var theToken = await getToken();
-  res.send(theToken);
+  res.send(await getUserInfo(theToken));
 };
 
 async function getToken() {

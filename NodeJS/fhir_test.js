@@ -4,7 +4,7 @@ const axios = require('axios');
 const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
 
-const FHIR_BASE_URL = 'https://apigwdev.healthplus.tw/fhir'; // 替換為實際的FHIR服務URL
+const FHIR_BASE_URL = ''; // 替換為實際的FHIR服務URL
 
 var identifier_uuid = uuidv4().substring(0,20);
 var access_token = ''; 
