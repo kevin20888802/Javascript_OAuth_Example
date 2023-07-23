@@ -6,8 +6,9 @@ const { getUserInfo } = require("../getUserInfo");
 const configPath = './configOAuth.json';
 const tokenEndpoint = '';
 
-module.exports.getTheToken = async function() {
-  return await getToken();
+module.exports = async function(req, res, next) {
+  var theToken = await getToken();
+  res.send(theToken);
 };
 
 async function getToken() {
@@ -22,13 +23,14 @@ async function getToken() {
       console.log(config);
       const httpModule = config.http === 'https' ? https : http;
 
-      const postData = `client_id=${config.client_id}&scope=${config.scope}&client_secret=${config.client_secret}&grant_type=client_credentials`;
+      const postData = `client_id=${config.client_id}&client_secret=${config.client_secret}&grant_type=client_credentials`;
       const options = {
         hostname: config.hostname,
         port: config.port,
         path: config.tokenEndpoint,
         method: 'POST',
         headers: {
+          'Accept':'*/*',
           'Content-Type': 'application/x-www-form-urlencoded',
           "Content-Length": Buffer.byteLength(postData)
         }
@@ -40,21 +42,19 @@ async function getToken() {
 
         res.on('data', (chunk) => {
           responseBody += chunk;
+          console.log(chunk);
         });
 
         res.on('end', () => {
           if (res.statusCode === 200) {
             const tokenResponse = JSON.parse(responseBody);
+            console.log(tokenResponse);
             resolve(tokenResponse.access_token);
           } else {
             console.log(responseBody);
             reject(new Error(`Failed to obtain token. Status code: ${res.statusCode}`));
           }
         });
-      });
-
-      req.on('error', (err) => {
-        reject(err);
       });
 
       req.write(postData);

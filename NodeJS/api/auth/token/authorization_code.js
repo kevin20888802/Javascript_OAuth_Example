@@ -26,23 +26,30 @@ fs.readFile(configPath, 'utf8', (err, data) => {
  * @returns 
  */
 module.exports = async function (req, res, next) {
-    if (
-        req.headers["authorization"] != undefined ||
-        req.query.access_token != undefined
-    ) {
+    if (req.headers["authorization"] != undefined || (req.query.access_token != undefined && req.query.access_token != "")) {
         console.log("OAUTH status: has access token");
-
-        // 把query放回去...
-        if (req.session.oriQuery) req.query = req.session.oriQuery;
         var theToken = "";
         // 檢查 token 是否 放在 HTTP Header 裡面的 authorization 欄位
         if (req.headers["authorization"] != undefined) {
             theToken = req.headers["authorization"];
-        } else if (req.query.access_token != undefined) {
+        }
+        if (req.query.access_token != undefined) {
             theToken = "" + req.query.access_token;
         }
         console.log("thetoken="+theToken);
-        res.send(await getUserInfo(theToken));
+        var userInfo = "";
+        try {
+            userInfo = await getUserInfo(theToken);
+            // 把query放回去...
+            if (req.session.oriQuery) {
+                req.query = req.session.oriQuery
+            }
+            res.send(userInfo);
+        } 
+        catch(e) {
+            return res
+                .status(500);
+        }
 
         // 否則就回401
         return res
