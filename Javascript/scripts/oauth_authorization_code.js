@@ -1,5 +1,4 @@
 var OAuthConfig = {};
-var keycloakAPI = "";
 
 async function authTest() {
     let authResult = await auth();
@@ -22,7 +21,6 @@ async function auth() {
     let authCode = searchParams.get("code");
     let session_state = searchParams.get("session_state");
     let thePort = OAuthConfig.port != "" ? `:${OAuthConfig.port}` : "";
-    keycloakAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}${thePort}/realms/${OAuthConfig.realm}`;
     // 無token但有auth code (通常為登入後跳轉回來的情況)
     if (theToken == "" && authCode != null) {
         theToken = await requestToken(authCode, session_state);
@@ -38,7 +36,7 @@ async function auth() {
     else {
         let redirectUri = removeURLParameter(window.location.href, "code");
         redirectUri = removeURLParameter(redirectUri, "session_state");
-        let loginPage = `${keycloakAPI}/protocol/openid-connect/auth?client_id=${OAuthConfig.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${redirectUri}`;
+        let loginPage = `${OAuthConfig.http}://${OAuthConfig.hostname}:${OAuthConfig.port}/${OAuthConfig.authEndpoint}?client_id=${OAuthConfig.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${redirectUri}`;
         window.location.href = loginPage;
         return false;
     }
@@ -63,7 +61,7 @@ function getCookie(name) {
  */
 function isTokenVaild(theToken) {
     return new Promise((resolve, reject) => {
-        let tokenAuthAPI = `${keycloakAPI}/protocol/openid-connect/userinfo`;
+        let tokenAuthAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}:${OAuthConfig.port}/${OAuthConfig.userinfoEndpoint}`;
         let request = new XMLHttpRequest();
         request.open('GET', tokenAuthAPI);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -89,11 +87,11 @@ function isTokenVaild(theToken) {
  */
 function requestToken(code, session_state) {
     return new Promise((resolve, reject) => {
-        let tokenAPI = `${keycloakAPI}/protocol/openid-connect/token`;
+        let tokenAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}:${OAuthConfig.port}/${OAuthConfig.tokenEndpoint}`;
         let redirectUri = removeURLParameter(window.location.href, "code");
         redirectUri = removeURLParameter(redirectUri, "session_state");
         let responseToken = "";
-        let params = `grant_type=authorization_code&client_id=${OAuthConfig.client_id}&code=${code}&session_state=${session_state}&redirect_uri=${redirectUri}`;
+        let params = `grant_type=authorization_code&client_id=${OAuthConfig.client_id}&client_secret=${OAuthConfig.client_secret}&code=${code}&session_state=${session_state}&redirect_uri=${redirectUri}`;
         let request = new XMLHttpRequest();
         request.open('POST', tokenAPI);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');

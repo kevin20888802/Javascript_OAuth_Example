@@ -3,7 +3,7 @@ const http = require('http');
 const https = require('https');
 
 const configPath = './configOAuth.json';
-const userinfoEndpoint = '/realms/{realm}/protocol/openid-connect/userinfo';
+var userinfoEndpoint = '/realms/{realm}/protocol/openid-connect/userinfo';
 module.exports.getUserInfo = async function(token) {
     return new Promise((resolve, reject) => {
       fs.readFile(configPath, 'utf8', (err, data) => {
@@ -13,13 +13,13 @@ module.exports.getUserInfo = async function(token) {
         }
   
         const config = JSON.parse(data);
-  
+        userinfoEndpoint = config.userinfoEndpoint;
         const httpModule = config.http === 'https' ? https : http;
   
         const options = {
           hostname: config.hostname,
           port: config.port,
-          path: userinfoEndpoint.replace('{realm}', config.realm),
+          path: userinfoEndpoint,
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`

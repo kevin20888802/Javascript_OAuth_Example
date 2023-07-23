@@ -2,8 +2,8 @@ const fs = require('fs');
 const querystring = require("querystring");
 const { getUserInfo } = require("../getUserInfo");
 const configPath = './configOAuth.json';
-const tokenEndpoint = '/realms/{realm}/protocol/openid-connect/token';
-const authEndpoint = '/realms/{realm}/protocol/openid-connect/auth';
+var tokenEndpoint = '/realms/{realm}/protocol/openid-connect/token';
+var authEndpoint = '/realms/{realm}/protocol/openid-connect/auth';
 
 var config;
 var https;
@@ -14,6 +14,8 @@ fs.readFile(configPath, 'utf8', (err, data) => {
     }
     config = JSON.parse(data);
     https = config.http === 'https' ? require('https') : require('http');
+    tokenEndpoint = config.tokenEndpoint;
+    authEndpoint = config.authEndpoint;
 });
 
 /**
@@ -80,6 +82,7 @@ async function requestOAuthToken(req, res) {
         grant_type: "authorization_code",
         method: "POST",
         code: req.query.code,
+        client_secret: config.client_secret,
         session_state: req.query.session_state,
         redirect_uri: `${config.http}://${req.headers.host}${theUrl}`
     });
@@ -87,7 +90,7 @@ async function requestOAuthToken(req, res) {
     const tokenOptions = {
         hostname: config.hostname,
         path:
-            tokenEndpoint.replace("{realm}", config.realm) +
+            tokenEndpoint +
             `?session_state=${req.query.session_state}&code=${req.query.code}`,
         port: config.port,
         method: "POST",
@@ -152,7 +155,7 @@ async function redirectToOAuthLoginPage(req, res) {
 
     // 導向至登入畫面...
     res.redirect(
-        `${config.http}://${config.hostname}:${config.port}${authEndpoint.replace("{realm}",config.realm)}?client_id=${config.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${config.http}://${req.headers.host}${theUrl}`
+        `${config.http}://${config.hostname}:${config.port}${authEndpoint}?client_id=${config.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${config.http}://${req.headers.host}${theUrl}`
     );
 }
 

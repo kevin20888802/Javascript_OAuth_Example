@@ -2,7 +2,9 @@
     "hostname":"localhost",
     "port":"8080",
     "http":"http",
-    "realm":"TestRealm",
+    "tokenEndpoint":"realms/TestRealm/protocol/openid-connect/token",
+    "authEndpoint":"realms/TestRealm/protocol/openid-connect/auth",
+    "userinfoEndpoint":"realms/TestRealm/protocol/openid-connect/userinfo",
     "client_id":"account",
-    "client_secret":"uQx0y8a4ro4earfbKKrDppNIbjL6HpJw"
+    "client_secret":"WTD0ztfyT2JHa9EEIEoAmty4GdP6egK1"
 }

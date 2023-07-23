@@ -20,7 +20,6 @@ async function auth() {
     let theToken = getCookie("access_token");
     let searchParams = new URL(window.location.href).searchParams;
     let thePort = OAuthConfig.port != "" ? `:${OAuthConfig.port}` : "";
-    keycloakAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}${thePort}/realms/${OAuthConfig.realm}`;
     // 無token
     if (theToken == "") {
         theToken = await requestToken();
@@ -43,7 +42,7 @@ async function auth() {
  */
 function requestToken() {
     return new Promise((resolve, reject) => {
-        let tokenAPI = `${keycloakAPI}/protocol/openid-connect/token`;
+        let tokenAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}:${OAuthConfig.port}/${OAuthConfig.tokenEndpoint}`;
         let responseToken = "";
         let params = `grant_type=client_credentials&client_id=${OAuthConfig.client_id}&client_secret=${OAuthConfig.client_secret}`;
         let request = new XMLHttpRequest();
@@ -79,7 +78,7 @@ function getCookie(name) {
  */
 function isTokenVaild(theToken) {
     return new Promise((resolve, reject) => {
-        let tokenAuthAPI = `${keycloakAPI}/protocol/openid-connect/userinfo`;
+        let tokenAuthAPI = `${OAuthConfig.http}://${OAuthConfig.hostname}:${OAuthConfig.port}/${OAuthConfig.userinfoEndpoint}`;
         let request = new XMLHttpRequest();
         request.open('GET', tokenAuthAPI);
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
