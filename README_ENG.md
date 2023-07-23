@@ -23,6 +23,7 @@ To install and set up the program, follow these steps:
 2. Download the program as a ZIP file or clone the repository using Git.
 3. If you downloaded a ZIP file, extract its contents.
 4. Open a command prompt or terminal and navigate to the program directory.
+5. Edit configOAuth.json settings.
 
 ## Execution
 
