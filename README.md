@@ -23,6 +23,7 @@ Javascript_OAuth_Example 是一個使用 JavaScript 主要撰寫的示例程式�
 2. 下載程式壓縮檔或使用 Git 克隆存儲庫。
 3. 解壓縮程式壓縮檔（如果適用）。
 4. 開啟命令提示字元或終端機，切換到程式目錄。
+5. 修改configOAuth.json的設定
 
 ## 執行說明
 
