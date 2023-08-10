@@ -33,12 +33,13 @@ To run the program, follow these steps:
    - Use Visual Studio Code to open the `./Javascript/` directory.
    - Launch the Live Server.
    - Access the corresponding URL in the browser to use the program.
-
+   - If you run into CORS issues, you can use Chrome's CORS Unblock plugin or fix it yourself.
 2. Server Version:
    - In the command prompt or terminal, navigate to the program directory.
    - Run `npm install` to install the required packages.
    - Execute `node server.js` to start the server.
    - Access `/api/auth/authorization_code` in the browser to test the authorization code flow, or access `/api/auth/client_credentials` to test the client credentials flow.
+   - If you run into CORS issues, you can use Chrome's CORS Unblock plugin or fix it yourself.
 
 Please note that when using the authorization code flow, ensure that Keycloak is version 19.0.2, as later versions (e.g., version 20) may encounter a redirect_uri error in the authorization code flow.
 
