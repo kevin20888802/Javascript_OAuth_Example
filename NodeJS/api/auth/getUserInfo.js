@@ -22,6 +22,7 @@ module.exports.getUserInfo = async function(token) {
           path: userinfoEndpoint,
           method: 'GET',
           headers: {
+            client_id: config.client_id,
             Authorization: `Bearer ${token}`
           }
         };
@@ -38,7 +39,8 @@ module.exports.getUserInfo = async function(token) {
               const userInfo = JSON.parse(responseBody);
               resolve(userInfo);
             } else {
-                console.log(responseBody);
+              console.log(`Failed to fetch user info. Status code: ${res.statusCode}`);
+              console.log(responseBody);
               reject(new Error(`Failed to fetch user info. Status code: ${res.statusCode}`));
             }
           });

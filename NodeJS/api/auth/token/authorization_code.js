@@ -18,6 +18,10 @@ fs.readFile(configPath, 'utf8', (err, data) => {
     authEndpoint = config.authEndpoint;
 });
 
+const serverHTTP = process.env.SERVER_HTTP || 'http'; 
+const serverIP = process.env.SERVER_IP || 'localhost'; // 取得伺服器位址，預設為 localhost
+const serverPort = process.env.SERVER_PORT || 3000; // 取得伺服器端口，預設為 3000
+
 /**
  * 
  * @param {import("express").Request} req 
@@ -44,11 +48,12 @@ module.exports = async function (req, res, next) {
             if (req.session.oriQuery) {
                 req.query = req.session.oriQuery
             }
+            console.log(userInfo);
             res.send(userInfo);
         } 
         catch(e) {
             return res
-                .status(500);
+                .status(500).send("token not vaild");
         }
 
         // 否則就回401
@@ -91,7 +96,7 @@ async function requestOAuthToken(req, res) {
         code: req.query.code,
         client_secret: config.client_secret,
         session_state: req.query.session_state,
-        redirect_uri: `${config.http}://${req.headers.host}${theUrl}`
+        redirect_uri: `${serverHTTP}://${req.headers.host}${theUrl}`
     });
 
     const tokenOptions = {
@@ -153,7 +158,7 @@ async function redirectToOAuthLoginPage(req, res) {
     let theUrl = req.originalUrl.split("?")[0];
     console.log(
         "OAuth2轉址位址:" +
-            `${config.http}://${req.headers.host}${theUrl}`
+            `${serverHTTP}://${req.headers.host}${theUrl}`
     );
     console.log(req.session);
     if(req.query != undefined) {
@@ -162,7 +167,7 @@ async function redirectToOAuthLoginPage(req, res) {
 
     // 導向至登入畫面...
     res.redirect(
-        `${config.http}://${config.hostname}:${config.port}${authEndpoint}?client_id=${config.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${config.http}://${req.headers.host}${theUrl}`
+        `${config.http}://${config.hostname}:${config.port}${authEndpoint}?client_id=${config.client_id}&grant_type=authorization_code&response_type=code&redirect_uri=${serverHTTP}://${req.headers.host}${theUrl}`
     );
 }
 

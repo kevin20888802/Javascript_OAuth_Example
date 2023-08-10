@@ -2,10 +2,10 @@
     "hostname":"127.0.0.1",
     "port":"8080",
     "http":"http",
-    "tokenEndpoint":"/realms/TestRealm/protocol/openid-connect/token",
-    "authEndpoint":"/realms/TestRealm/protocol/openid-connect/auth",
-    "userinfoEndpoint":"/realms/TestRealm/protocol/openid-connect/userinfo",
+    "tokenEndpoint":"/realms/testRealm/protocol/openid-connect/token",
+    "authEndpoint":"/realms/testRealm/protocol/openid-connect/auth",
+    "userinfoEndpoint":"/realms/testRealm/protocol/openid-connect/userinfo",
     "client_id":"account",
-    "client_secret":"WTD0ztfyT2JHa9EEIEoAmty4GdP6egK1",
+    "client_secret":"4JUQfjPUq2gdpjwui4O6cgY0yaAYuoKo",
     "scope":"roles"
 }
